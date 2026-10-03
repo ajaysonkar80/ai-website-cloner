@@ -11,9 +11,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # Website Reverse-Engineer Template
 
 ## What This Is
-A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents. The Next.js + shadcn/ui + Tailwind v4 base is pre-scaffolded — just run `/clone-website <url1> [<url2> ...]`.
+A reusable template for turning website references into polished client websites. The Next.js + shadcn/ui + Tailwind v4 base is pre-scaffolded — run `/clone-website <url1> [<url2> ...]` to research references and build an original client adaptation.
 
 ## Tech Stack
+## Client Adaptation Rule
+
+When `/clone-website` is used for client work, the reference site is a source of design and interaction insight, not source material. Use client-owned/licensed content and assets, create fresh code, and preserve the reference's useful UX/motion intent without reproducing distinctive creative material verbatim. Prioritize high-fidelity design quality over pixel-perfect duplication and perform an originality review before completion.
+
+
 - **Framework:** Next.js 16 (App Router, React 19, TypeScript strict)
 - **UI:** shadcn/ui (Radix primitives, Tailwind CSS v4, `cn()` utility)
 - **Icons:** Lucide React (default — will be replaced/supplemented by extracted SVGs)
