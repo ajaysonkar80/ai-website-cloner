@@ -1,13 +1,13 @@
 ---
 name: clone-website
-description: Reverse-engineer and clone one or more websites in one shot — extracts assets, CSS, and content section-by-section and proactively dispatches parallel builder agents in worktrees as it goes. Use this whenever the user wants to clone, replicate, rebuild, reverse-engineer, or copy any website. Also triggers on phrases like "make a copy of this site", "rebuild this page", "pixel-perfect clone". Provide one or more target URLs as arguments.
+description: Reconstruct a polished client website from one or more reference websites using deep visual/interaction research, client branding, original content/assets, and parallel builder agents. Preserve the reference site's useful UX and motion ideas without reproducing protected creative material verbatim. Use this whenever the user wants to clone, replicate, rebuild, reverse-engineer, or copy any website. Also triggers on phrases like "make a copy of this site", "rebuild this page", "high-fidelity clone". Provide one or more target URLs as arguments.
 argument-hint: "<url1> [<url2> ...]"
 user-invocable: true
 ---
 
 # Clone Website
 
-You are about to reverse-engineer and rebuild **$ARGUMENTS** as pixel-perfect clones.
+You are about to reverse-engineer **$ARGUMENTS** as high-fidelity design references and build an original client website from the resulting design/interaction insights.
 
 When multiple URLs are provided, preserve every pathname as a distinct route and isolate each target's research, screenshots, components, and assets. URLs that differ only by query string or fragment share a pathname, so resolve their route and state behavior explicitly in the output plan. Parallelize page work only after the shared foundation and output plan are fixed so concurrent builders cannot overwrite one another.
 
@@ -15,12 +15,74 @@ This is not a two-phase process (inspect then build). You are a **foreman walkin
 
 ## Scope Defaults
 
-The target is whatever page `$ARGUMENTS` resolves to. Clone exactly what's visible at that URL. Unless the user specifies otherwise, use these defaults:
+The target is whatever page `$ARGUMENTS` resolves to. Clone exactly what's visible at that URL.
+## Client Adaptation / IP-Safe Production Rules — Mandatory
 
-- **Fidelity level:** Pixel-perfect — exact match in colors, spacing, typography, animations
-- **In scope:** Visual layout and styling, component structure and interactions, responsive design, mock data for demo purposes
-- **Out of scope:** Real backend / database, authentication, real-time features, SEO optimization, accessibility audit
-- **Customization:** None — pure emulation
+This workflow is for producing original client websites using third-party sites as design references. It is **not** an exact-copy workflow. No workflow can guarantee that a finished site has zero legal risk; when a client asks for a near-identical reproduction of a distinctive site, stop short of that request and flag the situation for human/legal review.
+
+### Reference sites contribute DESIGN INSIGHT, not source material
+
+Use reference websites to understand:
+- information hierarchy and page topology
+- layout patterns and responsive behavior
+- interaction models
+- animation intent, trigger conditions, choreography, pacing, and perceived depth
+- typography roles, spacing relationships, contrast, density, and visual rhythm
+- common UI patterns and implementation ideas
+
+Do NOT put the reference site's original creative material into the client deliverable:
+- logos, wordmarks, trademarks, brand names, mascots, proprietary icons
+- photographs, illustrations, product screenshots, videos, or distinctive artwork
+- original marketing copy, testimonials, case studies, documentation, or other substantial text
+- copied source code, proprietary scripts, or distinctive code structures
+- target-site favicons, OG images, brand metadata, or other identity assets
+
+Generic UI labels such as "Home", "Pricing", "Contact", and "Learn more" may be treated as functional interface language, but do not copy substantial marketing prose.
+
+### Client materials are the source of truth
+
+Before build, look for client inputs such as:
+- `client/BRAND.md` — brand guidelines, colors, typography, tone, spacing preferences
+- `client/content.md` — approved copy and content hierarchy
+- `client/assets/` — approved logos, photos, illustrations, product screenshots, and other client-owned/licensed assets
+
+If these files are absent, use clearly marked placeholders or generated neutral content during development. Never silently substitute reference-site content.
+
+### Motion / "wow factor" rule
+
+The agent MUST preserve the **interaction outcome and emotional effect** that made a reference feel impressive, while implementing the motion as a fresh client-specific design.
+
+Extract:
+- trigger (scroll, hover, click, pointer, time, viewport entry)
+- sequence/choreography
+- number of visual stages
+- approximate duration/pacing
+- easing character
+- layering/depth/parallax intent
+- responsive behavior
+- accessibility fallbacks
+
+Then create a new implementation. Do not transcribe the reference site's exact keyframe definitions, animation code, proprietary motion assets, or one-to-one motion-path data. Vary staging, timing, offsets, composition, or implementation details so the client's motion system is its own design.
+
+### Distinctiveness check
+
+Before final assembly, perform an originality pass:
+1. Confirm all client identity assets come from the client pack.
+2. Confirm reference images/video/illustrations/logos are absent from the shipped site.
+3. Confirm substantial reference copy is absent.
+4. Confirm code was freshly implemented from design/behavior specifications rather than copied from the target.
+5. Confirm the final visual system is anchored to the client's brand.
+6. When multiple references were supplied, confirm the final page is a synthesis rather than a one-site facsimile.
+
+A visual resemblance by itself is not a legal determination. Do not label the output "copyright-safe" or "legally cleared"; report the concrete substitutions and adaptation steps instead.
+
+ Unless the user specifies otherwise, use these defaults:
+
+- **Fidelity level:** High-fidelity adaptation — preserve the reference's design quality, hierarchy, responsive behavior, interaction intent, and wow factor without pursuing pixel-identical reproduction
+- **In scope:** Visual layout patterns, component structure, responsive behavior, animation/motion concepts, client branding, client content, and polished interactions
+- **Out of scope:** Copying reference-site creative assets, original copy, source code, logos/marks, proprietary screenshots, or other distinctive brand material
+- **Customization:** Client brand and requirements are mandatory and override reference-site identity
+- **Preferred references:** Use 2–3 reference sites when available and synthesize common patterns plus selected motion ideas rather than reproducing one site's distinctive composition wholesale
 
 If the user provides additional instructions (specific fidelity level, customizations, extra context), honor those over the defaults.
 
@@ -161,7 +223,7 @@ Extract these from the page before doing anything else:
 
 **Colors** — Extract the site's color palette from computed styles across the page. For a single-site app, merge the target's colors into `src/app/globals.css` without removing tokens required by existing routes. Map them to shadcn's token names (background, foreground, primary, muted, etc.) where they fit. In an approved combined multi-site app, use a route wrapper or scoped token namespace instead of replacing another site's global palette.
 
-**Favicons & Meta** — Download page/site SEO assets under the planned site asset namespace. Put truly app-global metadata in the root layout only when it applies to every route; otherwise export route-specific metadata from the destination page or a route layout.
+**Favicons & Meta** — Use client-provided or newly created SEO/identity assets. Do not copy reference-site favicons, OG images, or brand metadata. Put truly app-global metadata in the root layout only when it applies to every route; otherwise export route-specific metadata from the destination page or a route layout.
 
 **Global UI patterns** — Identify any site-wide CSS or JS: custom scrollbar hiding, scroll-snap on the page container, global keyframe animations, backdrop filters, gradients used as overlays, **smooth scroll libraries** (Lenis, Locomotive Scroll — check for `.lenis`, `.locomotive-scroll`, or custom scroll container classes). Merge truly shared behavior into `globals.css`; keep page-specific behavior scoped to the page so existing routes do not change unexpectedly.
 
@@ -252,7 +314,7 @@ JSON.stringify({
 });
 ```
 
-Then use the uniquely named page download script to fetch everything into its planned asset root. Use batched parallel downloads (4 at a time) with proper error handling.
+Do not download or persist third-party reference media into the client site's asset namespace. Record only non-infringing descriptors needed to reproduce layout or behavior, then populate the final site exclusively with client-owned/licensed assets or neutral/generated placeholders.
 
 ### Optional Atlas Cloud Fallback for Unrecoverable Visual Assets
 
@@ -407,12 +469,12 @@ For each section (or sub-component, if you're breaking it up), create a spec fil
 - Cards: [...]
 
 ## Assets
-- Background image: `public/sites/<site-key>/<page-key>/images/<file>.webp`
-- Overlay image: `public/sites/<site-key>/<page-key>/images/<file>.png`
-- Icons used: <ArrowIcon>, <SearchIcon> from the planned page or same-site shared icon module
+- Reference asset role: <describe the visual role only>
+- Client replacement: `client/assets/<file>` or an explicitly generated neutral asset
+- Icons: use client-owned/licensed icons or fresh implementations; never copy distinctive target artwork
 
-## Text Content (verbatim)
-<All text content, copy-pasted from the live site>
+## Content Plan (do not copy reference copy)
+<Describe the content structure, approximate text lengths, hierarchy, CTA intent, and client-provided copy to use. Do not paste substantial reference-site copy.>
 
 ## Responsive Behavior
 - **Desktop (1440px):** <layout description>
@@ -463,35 +525,31 @@ After all sections are built and merged, wire the page into the exact destinatio
 - Confirm all routes that existed before this run are still present and were not unintentionally changed
 - Verify: `npm run build` passes clean
 
-## Phase 5: Visual QA Diff
+## Phase 5: Visual QA & Originality Review
 
-After assembly, do NOT declare the clone complete. Take side-by-side comparison screenshots:
+After assembly, do NOT declare the project complete immediately. Perform a bounded visual QA pass focused on design intent, responsive quality, motion quality, and originality:
 
-1. Open the original site and the clone at its planned local route side-by-side (or take screenshots at the same viewport widths)
-2. Compare section by section, top to bottom, at desktop (1440px)
-3. Compare again at mobile (390px)
-4. For each discrepancy found:
-   - Check the component spec file — was the value extracted correctly?
-   - If the spec was wrong: re-extract from browser MCP, update the spec, fix the component
-   - If the spec was right but the builder got it wrong: fix the component to match the spec
-5. Test all interactive behaviors: scroll through the page, click every button/tab, hover over interactive elements
-6. Verify smooth scroll feels right, header transitions work, tab switching works, animations play
+1. Compare the client build against the reference at desktop (1440px) and mobile (390px) for hierarchy, spacing rhythm, responsive behavior, and motion intent.
+2. Test all interactive behaviors: scroll, click, hover, pointer, tab switching, modal/dropdown states, and animations.
+3. Fix only meaningful discrepancies that affect polish or UX; do not chase 1–5px differences indefinitely.
+4. Run the originality checklist from the client adaptation rules and remove any reference-site creative material that slipped into the deliverable.
+5. Do at most two focused visual-revision passes unless the user explicitly requests higher fidelity.
 
-Only after this visual QA pass is the clone complete.
+The project is complete when it is polished, responsive, interactive, client-branded, and clearly an adaptation rather than a pixel-for-pixel reproduction.
 
 ## Pre-Dispatch Checklist
 
 Before dispatching ANY builder agent, verify you can check every box. If you can't, go back and extract more.
 
 - [ ] Spec file written to `docs/research/<site-key>/<page-key>/components/<name>.spec.md` with ALL sections filled
-- [ ] Every CSS value in the spec is from `getComputedStyle()`, not estimated
+- [ ] Important CSS values are extracted from `getComputedStyle()` for understanding, but the builder treats them as reference measurements rather than instructions for pixel-identical reproduction
 - [ ] Interaction model is identified and documented (static / click / scroll / time)
 - [ ] For stateful components: every state's content and styles are captured
 - [ ] For scroll-driven components: trigger threshold, before/after styles, and transition are recorded
 - [ ] For hover states: before/after values and transition timing are recorded
-- [ ] All images in the section are identified (including overlays and layered compositions)
+- [ ] All reference media is classified by role, but no protected target asset is copied into the deliverable; each visual has a client-owned/licensed or neutral replacement
 - [ ] Responsive behavior is documented for at least desktop and mobile
-- [ ] Text content is verbatim from the site, not paraphrased
+- [ ] Reference copy is converted into a content plan; final copy comes from the client or is newly authored
 - [ ] The builder prompt is under ~150 lines of spec; if over, the section needs to be split
 
 ## What NOT to Do
@@ -502,20 +560,27 @@ These are lessons from previous failed clones — each one cost hours of rework:
 - **Don't extract only the default state.** If there are tabs showing "Featured" on load, click Productivity, Creative, Lifestyle and extract each one's cards/content. If the header changes on scroll, capture styles at position 0 AND position 100+.
 - **Don't miss overlay/layered images.** A background watercolor + foreground UI mockup = 2 images. Check every container's DOM tree for multiple `<img>` elements and positioned overlays.
 - **Don't build mockup components for content that's actually videos/animations.** Check if a section uses `<video>`, Lottie, or canvas before building elaborate HTML mockups of what the video shows.
-- **Don't approximate CSS classes.** "It looks like `text-lg`" is wrong if the computed value is `18px` and `text-lg` is `18px/28px` but the actual line-height is `24px`. Extract exact values.
+- **Don't guess important CSS.** Extract actual values for reference understanding, but use them to inform an original client design rather than forcing pixel-identical parity.
 - **Don't build everything in one monolithic commit.** The whole point of this pipeline is incremental progress with verified builds at each step.
 - **Don't treat a new target as permission to replace the current app.** Preserve existing routes and namespaced artifacts; ask before updating a route that already exists.
 - **Don't reference docs from builder prompts.** Each builder gets the CSS spec inline in its prompt — never "see DESIGN_TOKENS.md for colors." The builder should have zero need to read external docs.
-- **Don't skip asset extraction.** Without real images, videos, and fonts, the clone will always look fake regardless of how perfect the CSS is.
+- **Don't ship reference assets.** Use client-owned/licensed media and fonts. Reference media may inform composition, crop, density, or visual role, but must not become the client's final assets.
 - **Don't give a builder agent too much scope.** If you're writing a builder prompt and it's getting long because the section is complex, that's a signal to break it into smaller tasks.
 - **Don't bundle unrelated sections into one agent.** A CTA section and a footer are different components with different designs — don't hand them both to one agent and hope for the best.
 - **Don't skip responsive extraction.** If you only inspect at desktop width, the clone will break at tablet and mobile. Test at 1440, 768, and 390 during extraction.
 - **Don't forget smooth scroll libraries.** Check for Lenis (`.lenis` class), Locomotive Scroll, or similar. Default browser scrolling feels noticeably different and the user will spot it immediately.
-- **Don't dispatch builders without a spec file.** The spec file forces exhaustive extraction and creates an auditable artifact. Skipping it means the builder gets whatever you can fit in a prompt from memory.
+- **Don't dispatch builders without a spec file.** The spec should contain reference-derived design/behavior facts plus client-specific replacements so builders never need to copy from the target.
 
 ## Completion
 
 When done, report:
+Also report:
+- Reference sites used
+- Client inputs consumed (`client/BRAND.md`, `client/content.md`, `client/assets/`, or equivalent)
+- Reference assets deliberately excluded
+- Originality/adaptation checks passed
+- Visual QA pass count
+
 - Source URL to destination-route mapping for every page built
 - Existing routes preserved and any explicitly approved replacements
 - Total sections built
